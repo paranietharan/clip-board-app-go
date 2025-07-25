@@ -40,4 +40,4 @@ jobs:
       
       - name: Test deployed app
         run: |
-          curl -f https://clipboardappgo-g6exfub7hqfzhee5.southeastasia-01.azurewebsites.net || exit 1
+          curl -f clip-board-app-go-cjesddc7b9fkg6gv.z01.azurefd.net || exit 1
