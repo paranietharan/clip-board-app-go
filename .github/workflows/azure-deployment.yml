@@ -25,7 +25,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: clip-board-go/clipboardappgo:latest
+          tags: clipboardappgo.azurecr.io/clipboardappgo:latest
 
       - name: Azure Login
         uses: azure/login@v2
@@ -36,4 +36,4 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: clipboardappgo
-          images: clip-board-go/clipboardappgo:latest
+          images: clipboardappgo.azurecr.io/clipboardappgo:latest
