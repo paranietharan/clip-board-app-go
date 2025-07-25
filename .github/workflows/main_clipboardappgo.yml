@@ -56,6 +56,5 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'clipboardappgo'
-          slot-name: 'Production'
           images: 'clipboardappgo.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_B21B882B971645B098C6F214FE1BF1AF }}/clipboardappgo:${{ github.sha }}'
           
