@@ -37,3 +37,7 @@ jobs:
         with:
           app-name: clipboardappgo
           images: clipboardappgo.azurecr.io/clipboardappgo:latest
+      
+      - name: Test deployed app
+        run: |
+          curl -f https://clipboardappgo-g6exfub7hqfzhee5.southeastasia-01.azurewebsites.net || exit 1
