@@ -1,0 +1,64 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy container app to Azure Web App - clipboardappgo
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read #This is required for actions/checkout
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to container registry
+        uses: docker/login-action@v2
+        with:
+          registry: clipboardappgo.azurecr.io/
+          username: ${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_B21B882B971645B098C6F214FE1BF1AF }}
+          password: ${{ secrets.AZUREAPPSERVICE_CONTAINERPASSWORD_F23F1B84F51D4DF583D7C9D9486486E9 }}
+
+      - name: Build and push container image to registry
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: clipboardappgo.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_B21B882B971645B098C6F214FE1BF1AF }}/clipboardappgo:${{ github.sha }}
+          file: ./Dockerfile
+
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write #This is required for requesting the JWT
+      contents: read #This is required for actions/checkout
+
+    needs: build
+    
+
+    steps:
+      
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_8A8A7CD669BF4CF3883DA3508669749A }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9613907B6EDB4736AD45FE0797746092 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_C72952BE25CD491BAAF8EB6DAF2BC34B }}
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'clipboardappgo'
+          slot-name: 'Production'
+          images: 'clipboardappgo.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_B21B882B971645B098C6F214FE1BF1AF }}/clipboardappgo:${{ github.sha }}'
+          
