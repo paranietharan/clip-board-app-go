@@ -1,4 +1,4 @@
-name: Build and Deploy to Azure Web App for Containers
+name: Azure Deployment Workflow
 
 on:
   push:
