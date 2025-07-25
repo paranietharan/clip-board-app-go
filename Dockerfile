@@ -16,6 +16,6 @@ COPY . .
 # Build the Go application
 RUN go build -o main .
 
-EXPOSE 8080
+EXPOSE 80
 # Set the entry point command to run the built binary
 CMD ["./main"]
